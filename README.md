@@ -4,7 +4,19 @@
 
 # 使用方法
 
-# Step 1
+## Step 1
+
+下载依赖项（用来解码Unicode）
+
+如果你是Debian用户，直接在shell输入
+
+`apt-get update`
+
+`apt-get install uni2ascii`
+
+其他版本的Linux请查看[官网](https://www.billposer.org/Software/uni2ascii.html#downloads)并选择自己的版本（因为我跑的是Debian所以我只知道Debian怎么下）
+
+## Step 2
 
 在shell中输入`crontab -e`
 
@@ -18,10 +30,10 @@
 
 `* * * * * bash /home/autorestart.sh`
 
-## Step 2
+## Step 3
 
 将你要保活的服务器的容器名加上watchdog字样（加哪里都可以反正只要有就行）
 
-## Step 3
+## Step 4
 
 关掉你的ssh然后就可以安心的去睡大觉或者吃麦当当了
