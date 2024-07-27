@@ -32,7 +32,7 @@
 
 `* * * * * bash /home/autorestart.sh`
 
-**注意！**，如果编辑crontab的用户不是root用户，你可能需要加上`sudo `在`bash /home/autorestart.sh`前
+**注意！** 如果编辑crontab的用户不是root用户，你可能需要加上`sudo `在`bash /home/autorestart.sh`前
 
 ## Step 3
 
