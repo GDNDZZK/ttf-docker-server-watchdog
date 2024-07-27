@@ -18,6 +18,8 @@
 
 ## Step 2
 
+将此仓库中的autorestart.sh放在你喜欢的位置
+
 在shell中输入`crontab -e`
 
 新建行，将以下项目加入
