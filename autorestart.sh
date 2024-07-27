@@ -10,9 +10,11 @@ function main()
     onlineServers=$(GetOnlineServerNames)
     for container in $(docker ps -a --format "{{.Names}}" --filter name=watchdog); do
         if $(IsServerOnline $container); then
+			echo "server online: "$container;
             continue
         else
-            offlineList+=$container" ";
+ 			echo "server offline: "$container;
+           offlineList+=$container" ";
         fi
     done;
     sleep 1m;
@@ -20,8 +22,10 @@ function main()
     onlineServers=$(GetOnlineServerNames);
     for container in $offlineList; do
         if $(IsServerOnline $container); then
+ 			echo "server back to online: "$container;
             continue
         else
+ 			echo "server still offline: "$container;
             docker restart $container
         fi
     done
@@ -30,6 +34,10 @@ function main()
 function IsServerOnline()
 {
     name=$(GetServerName $1);
+	# when server name start with "[" will bugged at grep, so we add a "\" before the "[" to fix the problem
+	if [ ${name:0:1} == "[" ]; then
+		name="\\"$name
+	fi;
     OIFS=$IFS;
     IFS="";
     if $(echo $onlineServers | grep -q $name); then
