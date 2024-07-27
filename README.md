@@ -32,6 +32,8 @@
 
 `* * * * * bash /home/autorestart.sh`
 
+**注意！**，如果编辑crontab的用户不是root用户，你可能需要加上`sudo `在`bash /home/autorestart.sh`前
+
 ## Step 3
 
 将你要保活的服务器的容器名加上watchdog字样（加哪里都可以反正只要有就行）
