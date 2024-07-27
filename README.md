@@ -8,7 +8,7 @@
 
 下载依赖项（用来解码Unicode）
 
-如果你是Debian用户，直接在shell输入
+如果你是Debian用户，直接在shell输入（如果非root用户请在指令最前加上`sudo `）
 
 `apt-get update`
 
