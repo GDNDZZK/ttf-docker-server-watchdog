@@ -14,7 +14,7 @@ function main()
             continue
         else
             echo "server offline: "$container;
-           offlineList+=$container" ";
+           offlineList+=$container" "
         fi
     done;
     sleep 1m;
