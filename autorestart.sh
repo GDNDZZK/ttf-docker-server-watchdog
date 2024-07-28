@@ -54,7 +54,7 @@ function GetServerName()
     envs=$(docker inspect $1);
     name=${envs#*NS_SERVER_NAME=};
     name=${name%%"\","*};
-    # i really dont konw why FS is "\\\\\\" not "\\\\"
+    # i really dont konw why FS="\\\\\\" not FS="\\\\", but is worked, so i dont care
     name=$(echo $name | awk 'BEGIN {FS="\\\\\\"; OFS="\\"} {$1=$1; print $0}');
     echo $(echo $name | ascii2uni -a U -q)
 }
