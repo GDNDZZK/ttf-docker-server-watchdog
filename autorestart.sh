@@ -24,7 +24,7 @@ function main()
         return
     fi;
 
-    sleep 1m;
+    sleep 1;
     # refresh again (cuz we do a double check here)
     onlineServers=$(GetOnlineServerNames);
     for container in $offlineList; do
@@ -36,7 +36,9 @@ function main()
             echo "cleaning tmp file: "$container;
             # idk why, but the container doesnt automatically clean up `/tmp` on quit or start
             # `/tmp` will continue to grow until there is no space left ( you definitely dont want to know what took over 800GB of space on my server )
-            docker exec $contianer sudo rm -rf /tmp && docker exec $contianer sudo mkdir /tmp && docker exec $contianer sudo chmod 777 /tmp &&
+            docker exec $container sudo rm -rf /tmp &&
+            docker exec $container sudo mkdir /tmp &&
+            docker exec $container sudo chmod 777 /tmp &&
             docker restart $container;
             echo "successes restarted: "$container
         fi
