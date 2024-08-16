@@ -29,7 +29,7 @@ function main()
     onlineServers=$(GetOnlineServerNames);
     for container in $offlineList; do
         if $(IsServerOnline $container); then
-            echo "server back to online: "$container;
+            echo "server is back to online: "$container;
             continue
         else
             echo "server still offline: "$container;
@@ -39,7 +39,9 @@ function main()
             docker exec $container sudo rm -rf /tmp &&
             docker exec $container sudo mkdir /tmp &&
             docker exec $container sudo chmod 777 /tmp &&
-            docker restart $container;
+            echo "successes: "$container;
+            echo "restarting: "$container;
+            docker restart $container &&
             echo "successes restarted: "$container
         fi
     done
