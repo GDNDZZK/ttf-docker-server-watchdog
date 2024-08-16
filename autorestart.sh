@@ -24,7 +24,7 @@ function main()
         return
     fi;
 
-    sleep 1;
+    sleep 1m;
     # refresh again (cuz we do a double check here)
     onlineServers=$(GetOnlineServerNames);
     for container in $offlineList; do
