@@ -37,8 +37,7 @@ function main()
             # idk why, but the container doesnt automatically clean up `/tmp` on quit or start
             # `/tmp` will continue to grow until there is no space left ( you definitely dont want to know what took over 800GB of space on my server )
             docker exec $container sudo rm -rf /tmp &&
-            docker exec $container sudo mkdir /tmp &&
-            docker exec $container sudo chmod 777 /tmp &&
+            docker exec $container sudo mkdir -m 777 /tmp &&
             echo "successes: "$container;
             echo "restarting: "$container;
             docker restart $container &&
