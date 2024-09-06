@@ -22,25 +22,25 @@
 
 4.确认nscn主服务器状态
 
-5.如以上都无问题，请挨个删除服务器名中的特殊字符来排错
+5.确认服务器名是否全部都为unicode而不是unicode混英文字符
 
-> 比如说我偶然发现`[`字符开头的服务器名会导致无限重启（当然针对这个特殊情况已经修复了），当然也因为只发现了这一个所以别的特殊情况我是不特别清楚的，已知是大部分特殊字符没问题
+6.如以上都无问题，请挨个删除服务器名中的特殊字符来排错
 
-6.如果还没修好那我是真没头绪了
+如果还没修好那我是真没头绪了
 
 # 食用方法
 
 ## Step 1
 
-下载依赖项（用来解码Unicode）
+### 下载依赖
 
-如果你是Debian用户，直接在shell输入（如果非root用户请在指令最前加上`sudo `）
+uni2ascii（用来解码Unicode）
 
-`apt-get update`
+请查看[这里](https://www.billposer.org/Software/uni2ascii.html#downloads)获得更多信息
 
-`apt-get install uni2ascii`
+jq（用来解码json）
 
-其他版本的Linux请查看[官网](https://www.billposer.org/Software/uni2ascii.html#downloads)并选择自己的版本（因为我跑的是Debian所以我只知道Debian怎么下）
+请查看[这里](https://jqlang.github.io/jq/download/)获得更多信息
 
 ## Step 2
 
@@ -66,4 +66,4 @@
 
 ## Step 4
 
-关掉你的ssh然后就可以安心的去睡大觉或者吃麦当当了
+关掉你的ssh然后就可以安心的去吃麦当当了
