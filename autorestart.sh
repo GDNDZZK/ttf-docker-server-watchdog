@@ -2,47 +2,52 @@
 set -euo pipefail
 onlineServers=""
 
+# 手动指定需要保活的容器名称列表
+CONTAINERS=("container1" "container2" "container3")
+
 function main()
 {
     offlineList=();
-    # fetch online server list
+    # 获取在线服务器列表
     onlineServers="$(GetOnlineServerNames)" || { echo "failed to fetch online server names"; exit 1; }
 
-    for container in $(docker ps -a --format "{{.Names}}" --filter name=watchdog); do
-        echo "server name: $(GetServerName $container)";
+    # 遍历预定义容器列表（不再自动获取）
+    for container in "${CONTAINERS[@]}"; do
+        echo "检查容器: $container"
+        echo "服务名称: $(GetServerName $container)";
         if $(IsServerOnline "$container"); then
-            echo "server online: $container"
+            echo "在线状态: $container"
         else
-            echo "server offline: $container"
+            echo "离线状态: $container"
             offlineList+=("$container")
         fi
     done;
 
-    # no server offline, return here
+    # 没有离线服务器直接退出
     if [ "${#offlineList[@]}" -eq 0 ]; then
-        echo "found no server offline, quit the script"
+        echo "未检测到离线服务器，退出脚本"
         return
     fi
 
-    # sleep for a min and do a double check
+    # 二次确认等待
     sleep 1m
-    # refresh names (cuz we do a double check here)
-    onlineServers="$(GetOnlineServerNames)" || { echo "failed to fetch online server names"; exit 1; }
+    onlineServers="$(GetOnlineServerNames)" || { echo "获取在线服务列表失败"; exit 1; }
 
+    # 处理持续离线的容器
     for container in "${offlineList[@]}"; do
-        echo "server name: $(GetServerName $container)"
+        echo "二次验证容器: $container"
+        echo "服务名称: $(GetServerName $container)"
         if $(IsServerOnline "$container"); then
-            echo "server back to online, doing nothing: $container"
+            echo "已恢复在线: $container"
         else
-            echo "server still offline: $container"
-            # idk why, but the container doesnt automatically clean up `/tmp` on quit or start
-            # `/tmp` will continue to grow until there is no space left ( you definitely dont want to know what took over 800GB of space on my server )
-            docker exec -- "$container" sudo rm -rf /tmp &&
-            echo "cleaned tmp file: $container"
-            docker exec -- "$container" sudo mkdir -m 777 /tmp &&
-            echo "create tmp file: $container"
-            docker restart "$container" &&
-            echo "successes restarted: $container"
+            echo "仍处于离线: $container"
+            # 清理并重启容器
+            sudo docker exec -- "$container" sudo rm -rf /tmp &&
+            echo "已清理临时文件: $container"
+            sudo docker exec -- "$container" sudo mkdir -m 777 /tmp &&
+            echo "已重建临时目录: $container"
+            sudo docker restart "$container" &&
+            echo "成功重启容器: $container"
         fi
     done
 }
@@ -50,7 +55,7 @@ function main()
 function IsServerOnline()
 {
     name="$(GetServerName "$1")"
-    if $(echo "$onlineServers" | grep -Fq "$name"); then
+    if grep -Fq "$name" <<< "$onlineServers"; then
         echo true
     else
         echo false
@@ -59,7 +64,7 @@ function IsServerOnline()
 
 function GetServerName()
 {
-    config="$(docker inspect "$1")"
+    config="$(sudo docker inspect "$1")"
     name="$(echo "$config" | jq -r '.[0].Config.Env[] | select(startswith("NS_SERVER_NAME=")) | sub("NS_SERVER_NAME="; "")')"
     echo "$(echo "$name" | ascii2uni -a U -q)"
 }
